@@ -83,12 +83,12 @@ class assign_feedback_sample extends assign_feedback_plugin {
         $sample = $this->get_sample($grade->id);
         if ($sample) {
             if ($data->sample_check !== $sample->sample) {
-                $sample->sample = $data->sample_check;                            
+                $sample->sample = ($data->sample_check != null ? 1 : 0);                          
             }
 
-            if ($data->sample_check !== $sample->sample) {
-                $sample->sample = $data->sample_check;                               
-            }
+            // if ($data->sample_check !== $sample->sample) {
+                // $sample->sample = $data->sample_check;                               
+            // }
 			
 			return $DB->update_record('assignfeedback_sample', $sample);
 			
@@ -96,7 +96,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
             $sample = new stdClass();
             $sample->assignment = $this->assignment->get_instance()->id;
             $sample->grade = $grade->id;
-            $sample->sample = $data->sample_check;
+            $sample->sample = ($data->sample_check != null ? 1 : 0);
             $sample->userid = $USER->id;
             return $DB->insert_record('assignfeedback_sample', $sample) > 0;
         }
@@ -112,10 +112,12 @@ class assign_feedback_sample extends assign_feedback_plugin {
     public function view_summary(stdClass $grade, & $showviewlink) {
 		global $DB;
         $sample = $this->get_sample($grade->id);
-        if ($sample->sample == 1) {                          
-            $sample_text = "Yes";
-            return format_text($sample_text, FORMAT_HTML);
-        }
+		if($sample){
+			if ($sample->sample == 1) {                          
+				$sample_text = "Yes";
+				return format_text($sample_text, FORMAT_HTML);
+			}
+		}
         return '';
     }   
 }
