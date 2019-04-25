@@ -18,16 +18,16 @@
  * Strings for component 'feedback_sample', language 'en'
  *
  * @package   assignfeedback_sample
- * @copyright 2017 Southampton Solent University 
+ * @copyright 2017 Southampton Solent University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['pluginname'] = 'Sample';
 $string['check_label'] = 'Part of moderated sample';
-$string['default'] = 'Default';
-$string['default_help'] = 'Default help';
+$string['default'] = 'Enabled';
+$string['default_help'] = 'Enable of disable this plugin';
 $string['sample'] = 'Sample';
 $string['enabled'] = 'Sample';
 $string['enabled_help'] = 	'<p>Units to be moderated by Unit External Examiners, thus requiring a sample are:</p><ol type="i"><li>all units at FHEQ level 5 and above;</li>
 							<li>any units at FHEQ level 4 that contributes towards the classification of an award; and</li><li>all units at FHEQ level 4 for awards made at that level (e.g. HNC) or where
-							required by a Professional, Statutory and Regulatory Body (PSRB).</li></ol><p>Academic Handbook, Section 2I: External Examiners, Paragraph 13</p>'; 
+							required by a Professional, Statutory and Regulatory Body (PSRB).</li></ol><p>Academic Handbook, Section 2I: External Examiners, Paragraph 13</p>';

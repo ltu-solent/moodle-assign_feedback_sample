@@ -20,7 +20,7 @@
  * @copyright 2017 Southampton Solent University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 defined('MOODLE_INTERNAL') || die();
 
 class assign_feedback_sample extends assign_feedback_plugin {
@@ -46,52 +46,96 @@ class assign_feedback_sample extends assign_feedback_plugin {
                 $mform->setDefault('sample_check', true);
             } else {
                 $mform->addElement('checkbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'));
-            }        
-            
-        } else {
-            $mform->addElement('checkbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'));         
-            
-        }		
-
-        return true;
-    }
-
-    /**
-     * Get the double marking grades from the database.
-     *
-     * @param int $gradeid
-     * @return stdClass|false The double marking grades for the given grade if it exists.
-     *                        False if it doesn't.
-     */
-    public function is_feedback_modified(stdClass $grade, stdClass $data) {
-        if ($grade) {
-            $sample = $this->get_sample($grade->id);
-        }
-
-        if ($sample) {
-            if ($sample->sample == $data->sample_check) {
-                return false;
             }
+
         } else {
-            return true;
+            $mform->addElement('checkbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'));
+
         }
+
         return true;
     }
+
+  public function supports_quickgrading() {
+      return true;
+  }
+
+  public function get_quickgrading_html($userid, $grade) {
+      $sample = $this->get_sample($grade->id);
+
+      $pluginname = get_string('pluginname', 'assignfeedback_sample');
+      $labeloptions = array('for'=>'quickgrade_sample_' . $userid,
+                            'class'=>'accesshide');
+      $selectoptions = array('name'=>'quickgrade_sample_' . $userid,
+                               'id'=>'quickgrade_sample_' . $userid,
+                               'class'=>'quickgrade');
+
+      $out = html_writer::tag('label', $pluginname, $labeloptions);
+
+      if ($sample->sample == 1) {
+      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="1" checked') . 'Yes' .  html_writer::start_tag('br');
+      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="0"') . 'No' .  html_writer::start_tag('br');
+    } else {
+      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="1"') . 'Yes' .  html_writer::start_tag('br');
+      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="0" checked') . 'No';
+    }
+    
+      return $out;
+}
+
+/**
+ * Has the plugin quickgrading form element been modified in the current form submission?
+ *
+ * @param int $userid The user id in the table this quickgrading element relates to
+ * @param stdClass $grade The grade
+ * @return boolean - true if the quickgrading form element has been modified
+ */
+
+ public function is_quickgrading_modified($userid, $grade) {
+     $sample_text = '';
+     if ($grade) {
+         $sample = $this->get_sample($grade->id);
+         if ($sample) {
+             $sample_text = $sample->sample;
+         }
+     }
+     // Note that this handles the difference between empty and not in the quickgrading
+     // form at all (hidden column).
+     $newvalue = optional_param('quickgrade_sample_' . $userid, false, PARAM_RAW);
+     return ($newvalue !== false) && ($newvalue != $sample_text);
+ }
+
+public function save_quickgrading_changes($userid, $grade) {
+    global $DB;
+    $sample = $this->get_sample($grade->id);
+    $quickgradesample = optional_param('quickgrade_sample_' . $userid, 0, PARAM_RAW);
+    if ($sample) {
+        $sample->sample = $quickgradesample;
+        return $DB->update_record('assignfeedback_sample', $sample);
+    } else {
+        $sample = new stdClass();
+        $sample->sample = $quickgradesample;
+        $sample->sampleformat = FORMAT_HTML;
+        $sample->grade = $grade->id;
+        $sample->assignment = $this->assignment->get_instance()->id;
+        return $DB->insert_record('assignfeedback_sample', $sample) > 0;
+    }
+}
 
     public function save(stdClass $grade, stdClass $data) {
         global $DB, $USER;
         $sample = $this->get_sample($grade->id);
         if ($sample) {
             if ($data->sample_check !== $sample->sample) {
-                $sample->sample = ($data->sample_check != null ? 1 : 0);                          
+                $sample->sample = ($data->sample_check != null ? 1 : 0);
             }
 
             // if ($data->sample_check !== $sample->sample) {
-                // $sample->sample = $data->sample_check;                               
+                // $sample->sample = $data->sample_check;
             // }
-			
+
 			return $DB->update_record('assignfeedback_sample', $sample);
-			
+
         } else {
             $sample = new stdClass();
             $sample->assignment = $this->assignment->get_instance()->id;
@@ -113,11 +157,15 @@ class assign_feedback_sample extends assign_feedback_plugin {
 		global $DB;
         $sample = $this->get_sample($grade->id);
 		if($sample){
-			if ($sample->sample == 1) {                          
-				$sample_text = "Yes";
+			if ($sample->sample == 1) {
+				$sample_text = 'Yes';
 				return format_text($sample_text, FORMAT_HTML);
-			}
+			} else {
+        $sample_text = 'No';
+        return format_text($sample_text, FORMAT_HTML);
+      }
+
 		}
         return '';
-    }   
+    }
 }
