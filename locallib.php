@@ -73,13 +73,13 @@ class assign_feedback_sample extends assign_feedback_plugin {
       $out = html_writer::tag('label', $pluginname, $labeloptions);
 
       if ($sample->sample == 1) {
-      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="1" checked') . 'Yes' .  html_writer::start_tag('br');
-      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="0"') . 'No' .  html_writer::start_tag('br');
-    } else {
-      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="1"') . 'Yes' .  html_writer::start_tag('br');
-      $out .= html_writer::start_tag('input type="radio" name="' . $selectoptions['name'] .'" value="0" checked') . 'No';
-    }
-    
+        $out .= html_writer::start_tag('input type="hidden" name="' . $selectoptions['name'] .'" value="0"'); //this hidden input sets the value to 0 if the checkbox is unchecked
+        $out .= html_writer::start_tag('input type="checkbox" name="' . $selectoptions['name'] .'" value="1" checked');
+      } else {
+        $out .= html_writer::start_tag('input type="hidden" name="' . $selectoptions['name'] .'" value="0"');
+        $out .= html_writer::start_tag('input type="checkbox" name="' . $selectoptions['name'] .'" value="1"');
+      }
+
       return $out;
 }
 
