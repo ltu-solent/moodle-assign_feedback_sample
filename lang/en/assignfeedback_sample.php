@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Sample';
-$string['check_label'] = 'Part of moderated sample';
+$string['label'] = 'Part of moderated sample';
 $string['default'] = 'Enabled';
 $string['default_help'] = 'Enable of disable this plugin';
 $string['sample'] = 'Sample';

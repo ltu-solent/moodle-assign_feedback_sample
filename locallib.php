@@ -38,20 +38,9 @@ class assign_feedback_sample extends assign_feedback_plugin {
         if ($grade) {
             $sample = $this->get_sample($grade->id);
         }
-
-        if ($sample) {
-            if ($sample->sample != 0) {
-                //$check = $mform->addElement('checkbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'));
-                //$mform->setDefault('sample_check', true);
-                $mform->addElement('advcheckbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'), null, null, array(0, 1));
-                $mform->setDefault('sample_check', true);
-            } else {
-                $mform->addElement('advcheckbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'), null, null, array(0, 1));
-            }
-
-        } else {
-            $mform->addElement('advcheckbox', 'sample_check', get_string('check_label', 'assignfeedback_sample'), null, null, array(0, 1));
-        }
+        
+        $mform->addElement('selectyesno', 'sample', get_string('label', 'assignfeedback_sample'));
+        $mform->setDefault('sample', $sample->sample);
 
         return true;
     }
@@ -62,26 +51,16 @@ class assign_feedback_sample extends assign_feedback_plugin {
 
     public function get_quickgrading_html($userid, $grade) {
         $sample = 0;
-        $checked = false;
         
-        if ($grade) {
-            
-            $s = $this->get_sample($grade->id);
-            
-            if ($s) {
-                $sample = $s->sample;
-            }
-            
-            if ($sample == 1) {
-                $checked = true;
-            }
+        if ($grade) {            
+            $sample = $this->get_sample($grade->id);
         }        
       
         $selectoptions = array('name'=>'quickgrade_sample_' . $userid,
                                'id'=>'quickgrade_sample_' . $userid,
                                );
 
-        $out = html_writer::checkbox($selectoptions['name'], $sample , $checked, null, array('id'=>$selectoptions['id']));
+        $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $sample , $selectoptions);
 
         return $out;
     }
@@ -104,7 +83,8 @@ class assign_feedback_sample extends assign_feedback_plugin {
         }
         // Note that this handles the difference between empty and not in the quickgrading
         // form at all (hidden column).
-        $newvalue = optional_param('quickgrade_sample_' . $userid, null, PARAM_RAW);
+        $newvalue = optional_param('quickgrade_sample_' . $userid, false, PARAM_BOOL);
+ 		
         return ($newvalue !== false) && ($newvalue != $sampletext);
     }
 
@@ -123,12 +103,9 @@ class assign_feedback_sample extends assign_feedback_plugin {
                 $sampletext = $sample->sample;
             }
         }
-var_dump($data);die();
-        $formtext = $data->quickgrade_sample_ . $grade->userid;
-     
-        $formtext = $formtext ? 1 : 0;
 
-        if ($formtext != $sampletext) {
+        $formtext = $data->sample;
+        if ($formtext == $sampletext) {
             return false;
         } else {
             return true;
@@ -139,7 +116,7 @@ var_dump($data);die();
         global $DB;
         $sample = $this->get_sample($grade->id);
         $quickgradesample = optional_param('quickgrade_sample_' . $userid, null, PARAM_RAW);
-       
+   
         if ($sample) {
             $sample->sample = $quickgradesample;
             return $DB->update_record('assignfeedback_sample', $sample);
@@ -158,13 +135,10 @@ var_dump($data);die();
 
         $sample = $this->get_sample($grade->id);
         if ($sample) {
-            if ($data->sample_check !== $sample->sample) {
-                $sample->sample = ($data->sample_check != null ? 1 : 0);
-            }
 
-            // if ($data->sample_check !== $sample->sample) {
-                // $sample->sample = $data->sample_check;
-            // }
+            if ($data->sample !== $sample->sample) {
+                $sample->sample = $data->sample;
+            }
 
 			return $DB->update_record('assignfeedback_sample', $sample);
 
@@ -172,7 +146,7 @@ var_dump($data);die();
             $sample = new stdClass();
             $sample->assignment = $this->assignment->get_instance()->id;
             $sample->grade = $grade->id;
-            $sample->sample = ($data->sample_check != null ? 1 : 0);
+            $sample->sample = $data->sample;
             $sample->userid = $USER->id;
             return $DB->insert_record('assignfeedback_sample', $sample) > 0;
         }
@@ -192,11 +166,7 @@ var_dump($data);die();
 			if ($sample->sample == 1) {
 				$sample_text = 'Yes';
 				return format_text($sample_text, FORMAT_HTML);
-			} else {
-        $sample_text = 'No';
-        return format_text($sample_text, FORMAT_HTML);
-      }
-
+			} 
 		}
         return '';
     }
