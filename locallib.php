@@ -40,8 +40,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
             $sample = $this->get_sample($grade->id);
         }
         
-        //$mform->addElement('selectyesno', 'sample', get_string('label', 'assignfeedback_sample'));
-        $mform->addElement('advcheckbox', 'sample', get_string('label', 'assignfeedback_sample'), null, null, array(0, 1));
+        $mform->addElement('selectyesno', 'sample', get_string('label', 'assignfeedback_sample'));
         $mform->setDefault('sample', $sample->sample);
 
         return true;
@@ -52,20 +51,20 @@ class assign_feedback_sample extends assign_feedback_plugin {
     }
 
     public function get_quickgrading_html($userid, $grade) {
-        $sample = 0;
+        $selected = 0;
         
         if ($grade) {            
             $sample = $this->get_sample($grade->id);
+            if($sample){
+              $selected = $sample->sample;
+            }
         }        
       
         $selectoptions = array('name'=>'quickgrade_sample_' . $userid,
                                'id'=>'quickgrade_sample_' . $userid,
                                );
-
-        //$out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $sample , $selectoptions);
-        //$out = html_writer::start_tag('input type="hidden" name="' . $selectoptions['name'] .'" value="0"'); 
-        $out = html_writer:: checkbox('quickgrade_sample_' . $userid, $sample, $sample, $label = '',
-            $selectoptions, null);
+        
+        $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $selected , $selectoptions);
         
         return $out;
     }
@@ -121,7 +120,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
         global $DB;
         $sample = $this->get_sample($grade->id);
         $quickgradesample = optional_param('quickgrade_sample_' . $userid, null, PARAM_RAW);
- var_dump($quickgradesample);die();  
+
         if ($sample) {
             $sample->sample = $quickgradesample;
             return $DB->update_record('assignfeedback_sample', $sample);
