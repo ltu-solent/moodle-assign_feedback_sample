@@ -58,10 +58,19 @@ class assign_feedback_sample extends assign_feedback_plugin {
             if($sample){
               $selected = $sample->sample;
             }
-        }        
+        }      
+        
+        global $DB;
+        $locked = $DB->get_record_sql('SELECT locked FROM {grade_items} where itemmodule = ? AND iteminstance = ?', array('assign', $this->assignment->get_instance()->id));
+        if($locked->locked != 0){
+          $disabled = ' disabled';
+        }else{
+            $disabled = '';
+        }
       
         $selectoptions = array('name'=>'quickgrade_sample_' . $userid,
                                'id'=>'quickgrade_sample_' . $userid,
+                               'disabled'=>$disabled,
                                );
         
         $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $selected , $selectoptions);
@@ -123,7 +132,12 @@ class assign_feedback_sample extends assign_feedback_plugin {
 
         if ($sample) {
             $sample->sample = $quickgradesample;
-            return $DB->update_record('assignfeedback_sample', $sample);
+            if(isset($quickgradesample)){
+                return $DB->update_record('assignfeedback_sample', $sample);
+            }else{
+               return null; 
+            }
+            
         } else {
             $sample = new stdClass();
             $sample->assignment = $this->assignment->get_instance()->id;
