@@ -25,22 +25,18 @@ Feature: In an assignment, teachers can mark a submission for as a sample
       | name                                | Test assignment name |
       | assignsubmission_onlinetext_enabled | 1                    |
       | assignfeedback_sample_enabled       | 1                    |
-
-  @javascript
-  Scenario: A teacher should be able to be mark a submission as a sample
-    Given I log in as "teacher1"
-    And I am on "Course 1" course homepage with editing mode on
-    And I am on the "Test assignment name" "assign activity editing" page
     And the following "mod_assign > submissions" exist:
       | assign                | user      | onlinetext                   |
       | Test assignment name  | student1  | I'm the student1 submission  |
       | Test assignment name  | student2  | I'm the student2 submission  |
-    And I am on the "Test assignment name" Activity page
-    And I follow "View all submissions"
+
+  @javascript
+  Scenario: A teacher should be able to be mark a submission as a sample
+    Given I log in as "teacher1"
+    And I am on the "Test assignment name" "assignfeedback_sample > View all submissions" page
     Then I click on "Grade" "link" in the "Student 1" "table_row"
     And I set the field "Part of moderated sample" to "1"
     And I press "Save changes"
-    And I am on the "Test assignment name" Activity page
-    And I follow "View all submissions"
+    Given I am on the "Test assignment name" "assignfeedback_sample > View all submissions" page
     Then "Student 1" row "Sample" column of "generaltable" table should contain "Yes"
     And "Student 2" row "Sample" column of "generaltable" table should not contain "Yes"
