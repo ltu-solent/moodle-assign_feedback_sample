@@ -56,13 +56,15 @@ class assign_feedback_sample extends assign_feedback_plugin {
      * @return bool Returns true if the elements have been created
      */
     public function get_form_elements_for_user($grade, MoodleQuickForm $mform, stdClass $data, $userid) {
-        $sample = 0;
         if ($grade) {
             $sample = $this->get_sample($grade->id);
         }
-
         $mform->addElement('selectyesno', 'sample', get_string('label', 'assignfeedback_sample'));
-        $mform->setDefault('sample', $sample->sample);
+        if ($sample) {
+            $mform->setDefault('sample', $sample->sample);
+        } else {
+            $mform->setDefault('sample', '0');
+        }
 
         return true;
     }
