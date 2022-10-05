@@ -13,15 +13,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
+ * Version file for Sample feedback
  * @package   assignfeedback_sample
  * @copyright 2017 Southampton Solent University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
-defined('MOODLE_INTERNAL') || die();                                                                                                
-                                                                                                                                    
-$plugin->version   = 2021060800;                                                                                                    
-$plugin->requires  = 2015111609;                                                                                                    
+
+defined('MOODLE_INTERNAL') || die();
+
+$plugin->version   = 2021060800;
+$plugin->requires  = 2015111609;
 $plugin->component = 'assignfeedback_sample';

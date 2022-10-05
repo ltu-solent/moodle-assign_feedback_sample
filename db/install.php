@@ -15,20 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Install file
+ *
  * @package   assignfeedback_sample
  * @copyright 2017 Southampton Solent University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
- 
-function xmldb_assignfeedback_sample_install() {                                                                                      
-    global $CFG;                                                                                                                    
-                                                                                                                                    
-    require_once($CFG->dirroot . '/mod/assign/adminlib.php');                                                                       
-                                                                                                                                    
-    // Set the correct initial order for the plugins.                                                                               
-    $pluginmanager = new assign_plugin_manager('assignfeedback');                                                                   
-    $pluginmanager->move_plugin('file', 'down');                                                                                    
-                                                                                                                                    
-    return true;                                                                                                                    
-}     
+
+/**
+ * Post install processing
+ *
+ * @return bool
+ */
+function xmldb_assignfeedback_sample_install() {
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/assign/adminlib.php');
+    // Set the correct initial order for the plugins.
+    $pluginmanager = new assign_plugin_manager('assignfeedback');
+    $pluginmanager->move_plugin('file', 'down');
+    return true;
+}
