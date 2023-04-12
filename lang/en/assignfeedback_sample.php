@@ -22,17 +22,21 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Sample';
-$string['label'] = 'Part of moderated sample';
 $string['default'] = 'Enabled';
 $string['default_help'] = 'Enable of disable this plugin';
-$string['sample'] = 'Sample';
+
 $string['enabled'] = 'Sample';
 $string['enabled_help'] = '<p>Modules to be moderated by Module External Examiners, thus requiring a sample are:</p>
-	<ol type="i">
-		<li>all modules at FHEQ level 5 and above;</li>
-		<li>any modules at FHEQ level 4 that contributes towards the classification of an award; and</li>
-		<li>all modules at FHEQ level 4 for awards made at that level (e.g. HNC) or where
-				required by a Professional, Statutory and Regulatory Body (PSRB).</li>
-	</ol>
-	<p>Academic Handbook, Section 2I: External Examiners, Paragraph 13</p>';
+    <ol type="i">
+        <li>all modules at FHEQ level 5 and above;</li>
+        <li>any modules at FHEQ level 4 that contributes towards the classification of an award; and</li>
+        <li>all modules at FHEQ level 4 for awards made at that level (e.g. HNC) or where
+                required by a Professional, Statutory and Regulatory Body (PSRB).</li>
+    </ol>
+    <p>Academic Handbook, Section 2I: External Examiners, Paragraph 13</p>';
+
+$string['label'] = 'Part of moderated sample';
+
+$string['pluginname'] = 'Sample';
+
+$string['sample'] = 'Sample';
