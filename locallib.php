@@ -170,7 +170,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
     public function save_quickgrading_changes($userid, $grade) {
         global $DB;
         $sample = $this->get_sample($grade->id);
-        $quickgradesample = optional_param('quickgrade_sample_' . $userid, null, PARAM_RAW);
+        $quickgradesample = optional_param('quickgrade_sample_' . $userid, false, PARAM_BOOL);
 
         if ($sample) {
             $sample->sample = $quickgradesample;
