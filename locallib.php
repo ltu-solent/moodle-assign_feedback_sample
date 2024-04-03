@@ -43,7 +43,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
      */
     public function get_sample($gradeid) {
         global $DB;
-        return $DB->get_record('assignfeedback_sample', array('grade' => $gradeid));
+        return $DB->get_record('assignfeedback_sample', ['grade' => $gradeid]);
     }
 
     /**
@@ -97,17 +97,18 @@ class assign_feedback_sample extends assign_feedback_plugin {
 
         global $DB;
         $locked = $DB->get_record_sql('SELECT locked FROM {grade_items} where itemmodule = ? AND iteminstance = ?',
-            array('assign', $this->assignment->get_instance()->id));
+            ['assign', $this->assignment->get_instance()->id]);
         if ($locked->locked != 0) {
             $disabled = ' disabled';
         } else {
             $disabled = '';
         }
 
-        $selectoptions = array('name' => 'quickgrade_sample_' . $userid,
-                               'id' => 'quickgrade_sample_' . $userid,
-                               'disabled' => $disabled,
-                               );
+        $selectoptions = [
+            'name' => 'quickgrade_sample_' . $userid,
+            'id' => 'quickgrade_sample_' . $userid,
+            'disabled' => $disabled,
+        ];
 
         $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $selected , $selectoptions);
 
