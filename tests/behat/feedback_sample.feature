@@ -35,6 +35,7 @@ Feature: In an assignment, teachers can mark a submission for as a sample
     Given I log in as "teacher1"
     And I am on the "Test assignment name" "assignfeedback_sample > View all submissions" page
     Then I click on "Grade" "link" in the "Student 1" "table_row"
+    And I choose "Grade" in the open action menu
     And I set the field "Part of moderated sample" to "1"
     And I press "Save changes"
     Given I am on the "Test assignment name" "assignfeedback_sample > View all submissions" page

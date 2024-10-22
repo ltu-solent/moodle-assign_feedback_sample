@@ -23,7 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023041200;
-$plugin->requires = 2022041900;
-$plugin->release = "4.0";
+$plugin->version = 2024102200;
+$plugin->requires = 2024100700;
+$plugin->release = "4.5";
 $plugin->component = 'assignfeedback_sample';
+$plugin->supported = [405, 500];
