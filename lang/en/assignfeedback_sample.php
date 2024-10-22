@@ -34,6 +34,7 @@ $string['enabled_help'] = '<p>Modules to be moderated by Module External Examine
                 required by a Professional, Statutory and Regulatory Body (PSRB).</li>
     </ol>
     <p>Academic Handbook, Section 2I: External Examiners, Paragraph 13</p>';
+$string['eventsubmissionsampled'] = 'The submission has sampled';
 
 $string['label'] = 'Part of moderated sample';
 
