@@ -31,7 +31,6 @@ require_once(__DIR__ . '/../../../../../../lib/behat/behat_base.php');
  * Behat Sample feedback steps
  */
 class behat_assignfeedback_sample extends behat_base {
-
     /**
      * Convert page names to URLs for steps like 'When I am on the "[identifier]" "[page type]" page'.
      *
@@ -50,6 +49,8 @@ class behat_assignfeedback_sample extends behat_base {
                 $cm = $this->get_assignment_cm_by_name($identifier);
                 return new moodle_url('/mod/assign/view.php', ['id' => $cm->id, 'action' => 'grading']);
                 break;
+            default:
+                throw new Exception("Unrecognised page type '{$type}'.");
         }
     }
 
@@ -65,6 +66,3 @@ class behat_assignfeedback_sample extends behat_base {
         return get_coursemodule_from_instance('assign', $assign->id, $assign->course);
     }
 }
-
-
-

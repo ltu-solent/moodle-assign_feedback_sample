@@ -25,7 +25,6 @@
  * Assign feedback Sample
  */
 class assign_feedback_sample extends assign_feedback_plugin {
-
     /**
      * Get feedback name
      *
@@ -96,8 +95,10 @@ class assign_feedback_sample extends assign_feedback_plugin {
         }
 
         global $DB;
-        $locked = $DB->get_record_sql('SELECT locked FROM {grade_items} where itemmodule = ? AND iteminstance = ?',
-            ['assign', $this->assignment->get_instance()->id]);
+        $locked = $DB->get_record_sql(
+            'SELECT locked FROM {grade_items} where itemmodule = ? AND iteminstance = ?',
+            ['assign', $this->assignment->get_instance()->id]
+        );
         if ($locked->locked != 0) {
             $disabled = ' disabled';
         } else {
@@ -110,7 +111,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
             'disabled' => $disabled,
         ];
 
-        $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $selected , $selectoptions);
+        $out = html_writer::select_yes_no('quickgrade_sample_' . $userid, $selected, $selectoptions);
 
         return $out;
     }
@@ -222,7 +223,7 @@ class assign_feedback_sample extends assign_feedback_plugin {
      * @param bool $showviewlink Set to true to show a link to view the full feedback
      * @return string
      */
-    public function view_summary(stdClass $grade, & $showviewlink) {
+    public function view_summary(stdClass $grade, &$showviewlink) {
         global $DB;
         $sample = $this->get_sample($grade->id);
         if ($sample) {
